@@ -24,21 +24,18 @@ import lombok.Setter;
 @Builder
 
 @Entity
-@SequenceGenerator(name = "MENU_SEQ_GENERATOR",
-			sequenceName = "MENU_SEQ", 
-			initialValue = 1,
-			allocationSize = 1)
+@SequenceGenerator(name = "MENU_SEQ_GENERATOR", sequenceName = "MENU_SEQ", initialValue = 1, allocationSize = 1)
 @NamedQuery(query = "select m from Menu m order by m.menuId", name = "Menu.findAllMenu")
 @NamedQuery(query = "select m from Menu m where m.name=:name order by m.name", name = "Menu.findByMenuName")
 public class Menu {
 	@Id
-	@Column(name="menu_id")
+	@Column(name = "menu_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MENU_SEQ_GENERATOR")
 	private int menuId;
 	private String name;
 	private int price;
 	private String imgname;
-	
+
 	@OneToMany(mappedBy = "menuId")
 	private List<Orders> pizzaOrders;
 
@@ -47,5 +44,4 @@ public class Menu {
 		return "메뉴 : " + name + ", 가격 : " + price;
 	}
 
-		
 }

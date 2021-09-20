@@ -23,22 +23,18 @@ import lombok.Setter;
 @Setter
 @Entity
 @Builder
-@SequenceGenerator(name = "CUSTOMER_SEQ_GENERATOR",
-		sequenceName = "CUSTOMER_SEQ", 
-		initialValue = 1,
-		allocationSize = 1)
-@NamedQuery (name="Customer.findBySId",
-			query="select c from Customers c where c.sId = :sId")
+@SequenceGenerator(name = "CUSTOMER_SEQ_GENERATOR", sequenceName = "CUSTOMER_SEQ", initialValue = 1, allocationSize = 1)
+@NamedQuery(name = "Customer.findBySId", query = "select c from Customers c where c.sId = :sId")
 public class Customers {
 	@Id
-	@Column(name="customer_id")
+	@Column(name = "customer_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUSTOMER_SEQ_GENERATOR")
 	private int customerId;
 	private String sId;
 	private String password;
 	private String address;
 	private String phone;
-	
+
 	@OneToMany(mappedBy = "customerId")
 	private List<Orders> pizzaOrders;
 
@@ -46,6 +42,6 @@ public class Customers {
 	public String toString() {
 		return "Customers [customerId=" + customerId + ", sId=" + sId + ", password=" + password + ", address="
 				+ address + ", phone=" + phone + "]";
-	}	
-	
+	}
+
 }

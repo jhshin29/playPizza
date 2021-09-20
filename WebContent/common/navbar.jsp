@@ -32,7 +32,7 @@
     <a href="${pageContext.request.contextPath}/pizza?command=menuAll" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Menu</a>
     <a href="${pageContext.request.contextPath}/pizza?command=branchesAll" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Branch</a>
     <a href="${pageContext.request.contextPath}/pizza?command=customer&sId=${sessionScope.id}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">My Page</a>
-    <a href="${pageContext.request.contextPath}/customer/logout.jsp" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Logout</a>
+    <a href="${pageContext.request.contextPath}/pizza?command=logout" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Logout</a>
     <span style="float: right; margin: 10px 20px;">Hello, ${sessionScope.id}</span>
   </div>
 
@@ -41,7 +41,7 @@
     <a href="${pageContext.request.contextPath}/pizza?command=menuAll" class="w3-bar-item w3-button w3-padding-large">Menu</a>
     <a href="${pageContext.request.contextPath}/pizza?command=branchesAll" class="w3-bar-item w3-button w3-padding-large">Branch</a>
     <a href="${pageContext.request.contextPath}/pizza?command=customer&sId=${sessionScope.id}" class="w3-bar-item w3-button w3-padding-large">My Page</a>
-    <a href="${pageContext.request.contextPath}/customer/logout.jsp" class="w3-bar-item w3-button w3-padding-large">Logout</a>
+    <a href="${pageContext.request.contextPath}/pizza?command=logout" class="w3-bar-item w3-button w3-padding-large">Logout</a>
   	<span style="float: right; margin: 10px 20px;">Hello, ${sessionScope.id}</span>
   </div>
 </div>

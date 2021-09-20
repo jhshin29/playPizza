@@ -20,20 +20,6 @@ public class OrdersDTO {
 	private Customers customerId;
 	private Menu menuId;
 	private Branches branchId;
-
-//	public String toString() {
-//		StringBuilder sb = new StringBuilder();
-//		sb.append(super.toString());
-//		sb.append("주문번호 : ");
-//		sb.append(orderId);
-//		sb.append("고객아이디 : ");
-//		sb.append(customerId.getSId());
-//		sb.append("메뉴 : ");
-//		sb.append(menuId.getName());
-//		sb.append("지점명 : ");
-//		sb.append(branchId.getName());
-//		return sb.toString();
-//	}
 	
 	public Orders toEntity() {
 		return Orders.builder().orderId(orderId).customerId(customerId).menuId(menuId).branchId(branchId).build();

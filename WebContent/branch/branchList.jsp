@@ -4,6 +4,7 @@
 
 <%
 	String url = application.getContextPath() + "/";
+	//http://ip:port/project/ 구조의 변수 
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -14,7 +15,11 @@
 <jsp:include page="../common/styleLink.jsp"></jsp:include>
 </head>
 <body>
+
+	<%-- http://ip:port/project/common/navbar.jsp --%>
+	
 	<jsp:include page="../common/navbar.jsp"></jsp:include>
+	
 	<header class="w3-container"
 		style="padding:128px 16px; margin: 0 20%">
 	<h1>Branch</h1>

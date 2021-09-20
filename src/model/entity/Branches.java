@@ -21,21 +21,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@SequenceGenerator(name = "BRANCHES_SEQ_GENERATOR",
-				sequenceName = "BRANCHES_SEQ", 
-				initialValue = 1,
-				allocationSize = 1)
-@NamedQuery(name="Branch.findByName",
-			query="select b from Branches b where b.name LIKE :name")
+@SequenceGenerator(name = "BRANCHES_SEQ_GENERATOR", sequenceName = "BRANCHES_SEQ", initialValue = 1, allocationSize = 1)
+@NamedQuery(name = "Branch.findByName", query = "select b from Branches b where b.name LIKE :name")
 public class Branches {
 	@Id
-	@Column(name="branch_id")
+	@Column(name = "branch_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BRANCHES_SEQ_GENERATOR")
 	private int branchId;
 	private String name;
 	private String address;
 	private String phone;
-	
+
 	@OneToMany(mappedBy = "branchId")
 	private List<Orders> pizzaOrders;
 
@@ -44,6 +40,4 @@ public class Branches {
 		return "지점id : " + branchId + ", 지점명 : " + name + ", 주소 : " + address + ", 전화번호 : " + phone;
 	}
 
-	
-	
 }

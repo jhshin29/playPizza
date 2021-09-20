@@ -3,23 +3,18 @@ package controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.Service;
 import model.dto.BranchesDTO;
 import model.dto.CustomersDTO;
 import model.dto.MenuDTO;
 import model.dto.OrdersDTO;
-import model.entity.Branches;
-import model.entity.Customers;
-import model.entity.Menu;
-import model.util.DBUtil;
 
 @WebServlet("/pizza")
 public class Controller extends HttpServlet {
@@ -50,6 +45,10 @@ public class Controller extends HttpServlet {
 				customerUpdate(request, response);
 			} else if (command.equals("customerDelete")) {
 				customerDelete(request, response);
+			} else if (command.equals("login")) {
+				loginOk(request, response);
+			} else if (command.equals("logout")) {
+				logout(request, response);
 			} else if (command.equals("ordersAll")) {
 				ordersAll(request, response);
 			} else if (command.equals("orderDelete")) {
@@ -64,6 +63,7 @@ public class Controller extends HttpServlet {
 		}
 
 	}
+
 
 	// 특정 지점 검색
 	public void branch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -128,6 +128,7 @@ public class Controller extends HttpServlet {
 		request.getRequestDispatcher(url).forward(request, response);
 	}
 
+	// 회원 가입
 	private void customerInsert(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String url = null;
@@ -162,7 +163,6 @@ public class Controller extends HttpServlet {
 
 		try {
 			CustomersDTO c = service.getCustomer(request.getParameter("sId"));
-			System.out.println(c);
 			if (c != null) {
 				request.setAttribute("customer", c);
 				url = "customer/mypage.jsp";
@@ -193,7 +193,8 @@ public class Controller extends HttpServlet {
 			throws ServletException, IOException {
 		String url = "showError.jsp";
 		try {
-			boolean result = service.updateCustomer(request.getParameter("sId"), request.getParameter("password"), request.getParameter("address"), request.getParameter("phone"));
+			boolean result = service.updateCustomer(request.getParameter("sId"), request.getParameter("password"),
+					request.getParameter("address"), request.getParameter("phone"));
 			if (result) {
 				request.setAttribute("customer", service.getCustomer(request.getParameter("sId")));
 				url = "customer/mypage.jsp";
@@ -225,6 +226,37 @@ public class Controller extends HttpServlet {
 		request.getRequestDispatcher(url).forward(request, response);
 	}
 
+	// 로그인
+	private void loginOk(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String id = request.getParameter("id");
+		String pwd = request.getParameter("pwd");
+
+		try {
+			CustomersDTO c = service.getCustomer(request.getParameter("id"));
+
+			if (c == null) {
+				response.sendRedirect("customer/loginRetry.jsp");
+			} else {
+				if (pwd.equals(c.getPassword())) {
+					session.setAttribute("id", id);
+					response.sendRedirect("index.jsp");
+				} else {
+					response.sendRedirect("customer/loginRetry.jsp");
+				}
+			}
+		} catch (Exception s) {
+			request.setAttribute("errorMsg", s.getMessage());
+			s.printStackTrace();
+		}
+	}
+
+	private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		request.getSession().removeAttribute("id");
+		response.sendRedirect(request.getContextPath());
+	}
+	
 	public void orderDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String url = "showError.jsp";
@@ -248,9 +280,10 @@ public class Controller extends HttpServlet {
 	public void ordersAll(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String url = "showError.jsp";
+		
 		try {
-
 			List<OrdersDTO> orders = service.getAllOrder(Integer.parseInt(request.getParameter("customerId")));
+			
 			request.setAttribute("orders", orders);
 			url = "orders/ordersList.jsp";
 		} catch (Exception e) {
@@ -261,23 +294,21 @@ public class Controller extends HttpServlet {
 	}
 
 	// 주문 정보 추가
-	protected void ordersInsert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void ordersInsert(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		String url = "showError.jsp";
-		
+
 		String sId = (String) request.getSession().getAttribute("id");
-		System.out.println("id" + sId);
 		String mName = request.getParameter("menu");
-		System.out.println("mName" + mName);
 		String bName = request.getParameter("branch");
-		System.out.println("bName" + bName);
 
 		// 해킹등으로 불합리하게 요청도 될수 있다는 가정하에 모든 데이터가 제대로 전송이 되었는지를 검증하는 로직
 		if (sId != null && sId.length() != 0 && mName != null && bName != null) {
 			try {
 				request.getParameter("orderInsert");
 				boolean result = service.addOrders(sId, mName, bName);
-				
+
 				OrdersDTO order = service.findLastOrder();
 				if (result) {
 					request.setAttribute("orderInsert", order);

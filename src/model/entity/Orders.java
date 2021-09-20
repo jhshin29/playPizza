@@ -23,10 +23,7 @@ import lombok.Setter;
 @Builder
 
 @Entity
-@SequenceGenerator(name = "ORDERS_SEQ_GENERATOR",
-sequenceName = "ORDERS_SEQ", 
-initialValue = 1,
-allocationSize = 1)
+@SequenceGenerator(name = "ORDERS_SEQ_GENERATOR", sequenceName = "ORDERS_SEQ", initialValue = 1, allocationSize = 1)
 
 @NamedQuery(query = "select o from Orders o where o.orderId=:orderId order by o.orderId", name = "Order.findByOrderId")
 @NamedQuery(query = "select o from Orders o where o.customerId.sId=:customerId order by o.customerId", name = "Order.findByCustomerId")
@@ -35,20 +32,20 @@ allocationSize = 1)
 @NamedQuery(query = "select o from Orders o where o.branchId=:branchId order by o.branchId", name = "Order.findByBranchId")
 public class Orders {
 	@Id
-	@Column(name="order_id")
+	@Column(name = "order_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDERS_SEQ_GENERATOR")
 	private int orderId;
-	
+
 	@ManyToOne(targetEntity = Customers.class)
-	@JoinColumn(name="customer_Id")
+	@JoinColumn(name = "customer_Id")
 	private Customers customerId;
-	
+
 	@ManyToOne(targetEntity = Menu.class)
-	@JoinColumn(name="menu_Id")
+	@JoinColumn(name = "menu_Id")
 	private Menu menuId;
-	
+
 	@ManyToOne(targetEntity = Branches.class)
-	@JoinColumn(name="branch_Id")
+	@JoinColumn(name = "branch_Id")
 	private Branches branchId;
 
 	@Override
@@ -56,5 +53,5 @@ public class Orders {
 		return "Orders [orderId=" + orderId + ", customerId=" + customerId + ", menuId=" + menuId + ", branchId="
 				+ branchId + "]";
 	}
-	
+
 }
